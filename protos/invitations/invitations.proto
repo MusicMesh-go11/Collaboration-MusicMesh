@@ -5,13 +5,14 @@ package invitation;
 option go_package = "generate/invitation";
 
 service InvitationService {
-  rpc Invite (InviteRequest) returns (Void);
-  rpc RespondInvitation (RespondInvitationRequest) returns (Void);
+  rpc Create (Invitation) returns (Void);
+  rpc GetById(InvitationID) returns (InvitationRes);
+  rpc Delete (InvitationID) returns (Void);
 }
 
 message Void {}
 
-message Invitation {
+message InvitationRes {
   string id = 1;
   string composition_id = 2;
   string inviter_id = 3;
@@ -28,13 +29,13 @@ enum InvitationStatus {
   DECLINED = 2;
 }
 
-message InviteRequest {
+message Invitation {
   string composition_id = 1;
   string inviter_id = 2;
   string invitee_id = 3;
+  InvitationStatus status = 4;
 }
 
-message RespondInvitationRequest {
+message InvitationID {
   string id = 1;
-  InvitationStatus status = 2;
 }

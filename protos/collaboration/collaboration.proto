@@ -5,17 +5,19 @@ package collaboration;
 option go_package = "generate/collaboration";
 
 service CollaborationService {
-  rpc Invite (InviteRequest) returns (Void);
-  rpc RespondInvitation (RespondInvitationRequest) returns (Void);
-  rpc GetCollaborators (CompositionID) returns (CollaboratorsRes);
-  rpc AddCollaborator (AddCollaboratorRequest) returns (Void);
-  rpc RemoveCollaborator (RemoveCollaboratorRequest) returns (Void);
+  rpc Create (Collaboration) returns (Void);
+  rpc GetById(CollaborationID) returns (CollaborationRes);
+  rpc GetByCompositionId (CompositionID) returns (CollaborationRes);
+  rpc Delete (CollaborationID) returns (Void);
 }
 
 message Void {}
 
+message CollaborationID{
+  string CollaborationID = 1;
+}
+
 message Collaboration {
-  string id = 1;
   string composition_id = 2;
   string user_id = 3;
   CollaborationRole role = 4;
@@ -28,38 +30,15 @@ enum CollaborationRole {
   VIEWER = 2;
 }
 
-enum InvitationStatus {
-  PENDING = 0;
-  ACCEPTED = 1;
-  DECLINED = 2;
-}
-
-message InviteRequest {
-  string composition_id = 1;
-  string inviter_id = 2;
-  string invitee_id = 3;
-}
-
-message RespondInvitationRequest {
-  string id = 1;
-  InvitationStatus status = 2;
-}
-
 message CompositionID {
-  string composition_id = 1;
+  string compositionId = 1;
 }
 
-message AddCollaboratorRequest {
-  string composition_id = 1;
-  string user_id = 2;
-  CollaborationRole role = 3;
-}
-
-message RemoveCollaboratorRequest {
-  string composition_id = 1;
-  string user_id = 2;
-}
-
-message CollaboratorsRes {
-  repeated Collaboration collaborators = 1;
+message CollaborationRes {
+  string id = 1;
+  string compositionId = 2;
+  string inviter_id = 3;
+  string invitee_id = 4;
+  string createdAt = 5;
+  string updatedAt = 6;
 }
