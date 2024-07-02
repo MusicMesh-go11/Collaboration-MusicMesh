@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package collaboration;
+
+option go_package = "generate/collaboration";
+
+service CollaborationService {
+  rpc Invite (InviteRequest) returns (Void);
+  rpc RespondInvitation (RespondInvitationRequest) returns (Void);
+  rpc GetCollaborators (CompositionID) returns (CollaboratorsRes);
+  rpc AddCollaborator (AddCollaboratorRequest) returns (Void);
+  rpc RemoveCollaborator (RemoveCollaboratorRequest) returns (Void);
+}
+
+message Void {}
+
+message Collaboration {
+  string id = 1;
+  string composition_id = 2;
+  string user_id = 3;
+  CollaborationRole role = 4;
+  string joined_at = 5;
+}
+
+enum CollaborationRole {
+  OWNER = 0;
+  COLLABORATOR = 1;
+  VIEWER = 2;
+}
+
+enum InvitationStatus {
+  PENDING = 0;
+  ACCEPTED = 1;
+  DECLINED = 2;
+}
+
+message InviteRequest {
+  string composition_id = 1;
+  string inviter_id = 2;
+  string invitee_id = 3;
+}
+
+message RespondInvitationRequest {
+  string id = 1;
+  InvitationStatus status = 2;
+}
+
+message CompositionID {
+  string composition_id = 1;
+}
+
+message AddCollaboratorRequest {
+  string composition_id = 1;
+  string user_id = 2;
+  CollaborationRole role = 3;
+}
+
+message RemoveCollaboratorRequest {
+  string composition_id = 1;
+  string user_id = 2;
+}
+
+message CollaboratorsRes {
+  repeated Collaboration collaborators = 1;
+}

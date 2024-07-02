@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package comment;
+
+option go_package = "generate/comment";
+
+service CommentService {
+  rpc AddComment (AddCommentRequest) returns (Void);
+  rpc GetComments (CompositionID) returns (CommentsRes);
+}
+
+message Void {}
+
+message Comment {
+  string id = 1;
+  string composition_id = 2;
+  string user_id = 3;
+  string content = 4;
+  string created_at = 5;
+  string updated_at = 6;
+  int64 deleted_at = 7;
+}
+
+message AddCommentRequest {
+  string composition_id = 1;
+  string user_id = 2;
+  string content = 3;
+}
+
+message CompositionID {
+  string composition_id = 1;
+}
+
+message CommentsRes {
+  repeated Comment comments = 1;
+}
