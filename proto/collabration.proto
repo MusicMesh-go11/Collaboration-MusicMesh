@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+option go_package = "genproto/";
+
+package collaboration;
+
+import "google/protobuf/timestamp.proto";
+
+service CollaborationService {
+  rpc CreateCollaboration(Collaboration) returns (Collaboration) {}
+  rpc GetCollaboration(GetCollaborationRequest) returns (Collaboration) {}
+  rpc UpdateCollaboration(Collaboration) returns (Collaboration) {}
+  rpc DeleteCollaboration(DeleteCollaborationRequest) returns (DeleteCollaborationResponse) {}
+
+  rpc CreateInvitation(Invitation) returns (Invitation) {}
+  rpc GetInvitation(GetInvitationRequest) returns (Invitation) {}
+  rpc UpdateInvitation(Invitation) returns (Invitation) {}
+  rpc DeleteInvitation(DeleteInvitationRequest) returns (DeleteInvitationResponse) {}
+
+  rpc CreateComment(Comment) returns (Comment) {}
+  rpc GetComment(GetCommentRequest) returns (Comment) {}
+  rpc UpdateComment(Comment) returns (Comment) {}
+  rpc DeleteComment(DeleteCommentRequest) returns (DeleteCommentResponse) {}
+}
+
+enum CollaborationRole {
+  OWNER = 0;
+  COLLABORATOR = 1;
+  VIEWER = 2;
+}
+
+enum InvitationStatus {
+  PENDING = 0;
+  ACCEPTED = 1;
+  DECLINED = 2;
+}
+
+message Collaboration {
+  int32 id = 1;
+  int32 composition_id = 2;
+  int32 user_id = 3;
+  CollaborationRole role = 4;
+  google.protobuf.Timestamp joined_at = 5;
+}
+
+message Invitation {
+  int32 id = 1;
+  int32 composition_id = 2;
+  int32 inviter_id = 3;
+  int32 invitee_id = 4;
+  InvitationStatus status = 5;
+  google.protobuf.Timestamp created_at = 6;
+}
+
+message Comment {
+  int32 id = 1;
+  int32 composition_id = 2;
+  int32 user_id = 3;
+  string content = 4;
+  google.protobuf.Timestamp created_at = 5;
+}
+
+message GetCollaborationRequest {
+  int32 id = 1;
+}
+
+message DeleteCollaborationRequest {
+  int32 id = 1;
+}
+
+message DeleteCollaborationResponse {
+  bool success = 1;
+}
+
+message GetInvitationRequest {
+  int32 id = 1;
+}
+
+message DeleteInvitationRequest {
+  int32 id = 1;
+}
+
+message DeleteInvitationResponse {
+  bool success = 1;
+}
+
+message GetCommentRequest {
+  int32 id = 1;
+}
+
+message DeleteCommentRequest {
+  int32 id = 1;
+}
+
+message DeleteCommentResponse {
+  bool success = 1;
+}
