@@ -26,6 +26,8 @@ type CompositionMetadataServiceClient interface {
 	GetTrending(ctx context.Context, in *Void, opts ...grpc.CallOption) (*CompositionsRes, error)
 	GetRecommended(ctx context.Context, in *Void, opts ...grpc.CallOption) (*CompositionsRes, error)
 	GetByGenre(ctx context.Context, in *GenreRequest, opts ...grpc.CallOption) (*CompositionsRes, error)
+	Like(ctx context.Context, in *Void, opts ...grpc.CallOption) (*Void, error)
+	UnLike(ctx context.Context, in *Void, opts ...grpc.CallOption) (*Void, error)
 	Update(ctx context.Context, in *CompositionRes, opts ...grpc.CallOption) (*Void, error)
 	Delete(ctx context.Context, in *CompositionMetadataId, opts ...grpc.CallOption) (*Void, error)
 }
@@ -74,6 +76,24 @@ func (c *compositionMetadataServiceClient) GetByGenre(ctx context.Context, in *G
 	return out, nil
 }
 
+func (c *compositionMetadataServiceClient) Like(ctx context.Context, in *Void, opts ...grpc.CallOption) (*Void, error) {
+	out := new(Void)
+	err := c.cc.Invoke(ctx, "/compositionMetadata.CompositionMetadataService/Like", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *compositionMetadataServiceClient) UnLike(ctx context.Context, in *Void, opts ...grpc.CallOption) (*Void, error) {
+	out := new(Void)
+	err := c.cc.Invoke(ctx, "/compositionMetadata.CompositionMetadataService/UnLike", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *compositionMetadataServiceClient) Update(ctx context.Context, in *CompositionRes, opts ...grpc.CallOption) (*Void, error) {
 	out := new(Void)
 	err := c.cc.Invoke(ctx, "/compositionMetadata.CompositionMetadataService/Update", in, out, opts...)
@@ -100,6 +120,8 @@ type CompositionMetadataServiceServer interface {
 	GetTrending(context.Context, *Void) (*CompositionsRes, error)
 	GetRecommended(context.Context, *Void) (*CompositionsRes, error)
 	GetByGenre(context.Context, *GenreRequest) (*CompositionsRes, error)
+	Like(context.Context, *Void) (*Void, error)
+	UnLike(context.Context, *Void) (*Void, error)
 	Update(context.Context, *CompositionRes) (*Void, error)
 	Delete(context.Context, *CompositionMetadataId) (*Void, error)
 	mustEmbedUnimplementedCompositionMetadataServiceServer()
@@ -120,6 +142,12 @@ func (UnimplementedCompositionMetadataServiceServer) GetRecommended(context.Cont
 }
 func (UnimplementedCompositionMetadataServiceServer) GetByGenre(context.Context, *GenreRequest) (*CompositionsRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetByGenre not implemented")
+}
+func (UnimplementedCompositionMetadataServiceServer) Like(context.Context, *Void) (*Void, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Like not implemented")
+}
+func (UnimplementedCompositionMetadataServiceServer) UnLike(context.Context, *Void) (*Void, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UnLike not implemented")
 }
 func (UnimplementedCompositionMetadataServiceServer) Update(context.Context, *CompositionRes) (*Void, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
@@ -213,6 +241,42 @@ func _CompositionMetadataService_GetByGenre_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CompositionMetadataService_Like_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Void)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CompositionMetadataServiceServer).Like(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/compositionMetadata.CompositionMetadataService/Like",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CompositionMetadataServiceServer).Like(ctx, req.(*Void))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CompositionMetadataService_UnLike_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Void)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CompositionMetadataServiceServer).UnLike(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/compositionMetadata.CompositionMetadataService/UnLike",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CompositionMetadataServiceServer).UnLike(ctx, req.(*Void))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _CompositionMetadataService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CompositionRes)
 	if err := dec(in); err != nil {
@@ -271,6 +335,14 @@ var CompositionMetadataService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetByGenre",
 			Handler:    _CompositionMetadataService_GetByGenre_Handler,
+		},
+		{
+			MethodName: "Like",
+			Handler:    _CompositionMetadataService_Like_Handler,
+		},
+		{
+			MethodName: "UnLike",
+			Handler:    _CompositionMetadataService_UnLike_Handler,
 		},
 		{
 			MethodName: "Update",
